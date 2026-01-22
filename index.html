@@ -1,70 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Passcode Check</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #111;
-            transition: background-color 0.3s;
-            font-family: Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<title>Morse Access Terminal</title>
 
-        .container {
-            text-align: center;
-        }
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: #020b02;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Courier New", monospace;
+        color: #00ff88;
+        overflow: hidden;
+        transition: background-color 0.2s;
+    }
 
-        input {
-            padding: 12px;
-            font-size: 18px;
-            border-radius: 6px;
-            border: none;
-            outline: none;
-            text-align: center;
-        }
+    .scanlines::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(0,0,0,0) 0px,
+            rgba(0,0,0,0) 2px,
+            rgba(0,0,0,0.15) 3px
+        );
+        pointer-events: none;
+    }
 
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-    </style>
+    .terminal {
+        border: 2px solid #00ff88;
+        padding: 30px;
+        width: 360px;
+        box-shadow: 0 0 20px #00ff88;
+        text-align: center;
+        position: relative;
+    }
+
+    h1 {
+        font-size: 18px;
+        margin-bottom: 20px;
+        text-shadow: 0 0 8px #00ff88;
+    }
+
+    input {
+        width: 100%;
+        background: black;
+        border: 1px solid #00ff88;
+        color: #00ff88;
+        padding: 10px;
+        font-family: inherit;
+        font-size: 16px;
+        text-align: center;
+        outline: none;
+    }
+
+    input::placeholder {
+        color: #007744;
+    }
+
+    .status {
+        margin-top: 15px;
+        height: 22px;
+        font-size: 16px;
+    }
+
+    .granted {
+        color: #00ff88;
+        text-shadow: 0 0 10px #00ff88;
+    }
+
+    .denied {
+        color: #ff0033;
+        text-shadow: 0 0 10px #ff0033;
+    }
+</style>
 </head>
-<body>
 
-<div class="container">
-    <input type="text" id="passcode" placeholder="Enter passcode">
-    <br>
-    <button onclick="checkPasscode()">Submit</button>
+<body class="scanlines">
+
+<div class="terminal">
+    <h1>▶ MORSE SIGNAL DETECTED</h1>
+    <p>Decode the transmission and enter the passcode</p>
+
+    <input type="text" id="passcode" placeholder="ENTER CODE" autofocus>
+
+    <div class="status" id="status"></div>
 </div>
 
 <script>
-    const CORRECT_PASSCODE = "cyberfest";
+    const CORRECT_PASSCODE = "cyber";
 
     function flash(color) {
         document.body.style.backgroundColor = color;
         setTimeout(() => {
-            document.body.style.backgroundColor = "#111";
-        }, 300);
+            document.body.style.backgroundColor = "#020b02";
+        }, 200);
     }
 
     function checkPasscode() {
-        const input = document.getElementById("passcode").value;
+        const input = document.getElementById("passcode").value
+            .trim()
+            .toLowerCase();
 
-        if (input.toLowerCase() === CORRECT_PASSCODE.toLowerCase()) {
-            flash("green");
-        } else {
-            flash("red");
-        }
+        const status = document.getElementById("status");
+        status.textContent = "VERIFYING…";
+
+        setTimeout(() => {
+            if (input === CORRECT_PASSCODE.toLowerCase()) {
+                status.textContent = "ACCESS GRANTED";
+                status.className = "status granted";
+                flash("#003b1f");
+            } else {
+                status.textContent = "ACCESS DENIED";
+                status.className = "status denied";
+                flash("#3b000f");
+            }
+        }, 600);
     }
+
+    document.getElementById("passcode")
+        .addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                checkPasscode();
+            }
+        });
 </script>
 
 </body>
