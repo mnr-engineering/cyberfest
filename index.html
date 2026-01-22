@@ -93,19 +93,35 @@
 </div>
 
 <script>
-    const CORRECT_PASSCODE = "cyber";
+    const CORRECT_PASSCODE = "h4ck3r";
 
-    function flash(color) {
-        document.body.style.backgroundColor = color;
-        setTimeout(() => {
-            document.body.style.backgroundColor = "#020b02";
-        }, 200);
+    function flashMultiple(color, flashes = 3, duration = 300) {
+        let count = 0;
+
+        const interval = setInterval(() => {
+            document.body.style.backgroundColor =
+                document.body.style.backgroundColor === color
+                    ? "#020b02"
+                    : color;
+
+            count++;
+
+            if (count >= flashes * 2) {
+                clearInterval(interval);
+                document.body.style.backgroundColor = "#020b02";
+            }
+        }, duration);
+    }
+
+    function clearInput() {
+        const inputBox = document.getElementById("passcode");
+        inputBox.value = "";
+        inputBox.focus();
     }
 
     function checkPasscode() {
-        const input = document.getElementById("passcode").value
-            .trim()
-            .toLowerCase();
+        const inputBox = document.getElementById("passcode");
+        const input = inputBox.value.trim().toLowerCase();
 
         const status = document.getElementById("status");
         status.textContent = "VERIFYING…";
@@ -114,11 +130,13 @@
             if (input === CORRECT_PASSCODE.toLowerCase()) {
                 status.textContent = "ACCESS GRANTED";
                 status.className = "status granted";
-                flash("#003b1f");
+                flashMultiple("#003b1f", 3, 400);
+                clearInput();
             } else {
                 status.textContent = "ACCESS DENIED";
                 status.className = "status denied";
-                flash("#3b000f");
+                flashMultiple("#3b000f", 3, 400);
+                clearInput();
             }
         }, 600);
     }
@@ -131,5 +149,4 @@
         });
 </script>
 
-</body>
 </html>
