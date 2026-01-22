@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Passcode Check</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #111;
+            transition: background-color 0.3s;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <input type="text" id="passcode" placeholder="Enter passcode">
+    <br>
+    <button onclick="checkPasscode()">Submit</button>
+</div>
+
+<script>
+    const CORRECT_PASSCODE = "cyberfest";
+
+    function flash(color) {
+        document.body.style.backgroundColor = color;
+        setTimeout(() => {
+            document.body.style.backgroundColor = "#111";
+        }, 300);
+    }
+
+    function checkPasscode() {
+        const input = document.getElementById("passcode").value;
+
+        if (input.toLowerCase() === CORRECT_PASSCODE.toLowerCase()) {
+            flash("green");
+        } else {
+            flash("red");
+        }
+    }
+</script>
+
+</body>
+</html>
